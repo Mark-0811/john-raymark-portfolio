@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { FormEvent, useState } from 'react'
 import { ArrowUpRight, ChevronRight, GitBranch, Mail, Menu, Send, X } from 'lucide-react'
 
+const assetPath = (path: string) => `${process.env.GITHUB_ACTIONS === 'true' ? '/john-raymark-portfolio' : ''}${path}`
+
 const email = 'llavanesjohnraymark@gmail.com'
 
 const skills = [
@@ -18,12 +20,12 @@ const flagshipProjects = [
     no: '01', title: 'HRIS Project', subtitle: 'Human resources operations platform',
     description: 'A production-ready HR operations workspace for employee records, attendance, leave management, approvals, reporting, and role-based administration.',
     screenshots: [
-      { src: '/projects/hris/live-dashboard.png', label: 'Dashboard' },
-      { src: '/projects/hris/live-employees.png', label: 'Employees' },
-      { src: '/projects/hris/live-attendance.png', label: 'Attendance' },
-      { src: '/projects/hris/live-leave.png', label: 'Leave' },
-      { src: '/projects/hris/live-reports.png', label: 'Reports' },
-      { src: '/projects/hris/live-new-employee.png', label: 'Employee form' },
+      { src: assetPath('/projects/hris/live-dashboard.png'), label: 'Dashboard' },
+      { src: assetPath('/projects/hris/live-employees.png'), label: 'Employees' },
+      { src: assetPath('/projects/hris/live-attendance.png'), label: 'Attendance' },
+      { src: assetPath('/projects/hris/live-leave.png'), label: 'Leave' },
+      { src: assetPath('/projects/hris/live-reports.png'), label: 'Reports' },
+      { src: assetPath('/projects/hris/live-new-employee.png'), label: 'Employee form' },
     ],
     tags: ['Flask', 'PostgreSQL', 'Docker', 'HR Operations'],
   },
@@ -31,12 +33,12 @@ const flagshipProjects = [
     no: '02', title: 'Enterprise Resource Planning', subtitle: 'Modular operations platform',
     description: 'A modular ERP application that connects procurement, purchase orders, inventory, receiving, supplier bills, user access, and operational reporting in one workflow.',
     screenshots: [
-      { src: '/projects/erp/live-dashboard.png', label: 'Procurement home' },
-      { src: '/projects/erp/live-purchase-requests.png', label: 'Purchase requests' },
-      { src: '/projects/erp/live-purchase-orders.png', label: 'Purchase orders' },
-      { src: '/projects/erp/live-products.png', label: 'Products' },
-      { src: '/projects/erp/live-receiving.png', label: 'Receiving' },
-      { src: '/projects/erp/live-supplier-bills.png', label: 'Supplier bills' },
+      { src: assetPath('/projects/erp/live-dashboard.png'), label: 'Procurement home' },
+      { src: assetPath('/projects/erp/live-purchase-requests.png'), label: 'Purchase requests' },
+      { src: assetPath('/projects/erp/live-purchase-orders.png'), label: 'Purchase orders' },
+      { src: assetPath('/projects/erp/live-products.png'), label: 'Products' },
+      { src: assetPath('/projects/erp/live-receiving.png'), label: 'Receiving' },
+      { src: assetPath('/projects/erp/live-supplier-bills.png'), label: 'Supplier bills' },
     ],
     tags: ['Python', 'Flask', 'PostgreSQL', 'Docker'],
   },
@@ -81,7 +83,7 @@ export default function Page() {
           <div className="hero-actions reveal delay-3"><a className="button button-primary" href="#projects">Explore my work <ArrowUpRight size={17} /></a><a className="text-link" href="#contact">Start a conversation <ChevronRight size={15} /></a></div>
         </div>
         <div className="profile-card reveal delay-2">
-          <div className="profile-image-wrap"><Image src="/john-raymark-llavanes.jpg" alt="John Raymark LLavanes" fill priority sizes="(max-width: 760px) 100vw, 390px" className="profile-image" /></div>
+          <div className="profile-image-wrap"><Image src={assetPath('/john-raymark-llavanes.jpg')} alt="John Raymark LLavanes" fill priority sizes="(max-width: 760px) 100vw, 390px" className="profile-image" /></div>
           <div className="profile-caption"><span>John Raymark LLavanes</span><small>Python · Odoo · Full-stack</small></div>
         </div>
         <div className="hero-note">AVAILABLE FOR COLLABORATION <span>From business logic to production-ready software.</span></div>
