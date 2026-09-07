@@ -1,0 +1,78 @@
+services:
+  portfolio:
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+
+  hris-web:
+    build:
+      context: ${HRIS_PROJECT_PATH:-../../CODEX/HRIS_Project}
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ${HRIS_PROJECT_PATH:-../../CODEX/HRIS_Project}/.env.docker
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@hris-db:5432/hris_postgres
+    depends_on:
+      hris-db:
+        condition: service_healthy
+    ports:
+      - "5001:5000"
+    volumes:
+      - hris_uploads:/app/hris/static/uploads
+
+  hris-db:
+    build:
+      context: ${HRIS_PROJECT_PATH:-../../CODEX/HRIS_Project}
+      dockerfile: docker/postgres/Dockerfile
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hris_postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d hris_postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - hris_postgres_data:/var/lib/postgresql/data
+
+  erp-web:
+    build:
+      context: ${ERP_PROJECT_PATH:-../my_erp_system}
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      FLASK_CONFIG: development
+      DATABASE_URL: postgresql://erpuser:erppass@erp-db:5432/erp
+      SECRET_KEY: ${ERP_SECRET_KEY:-change-me-before-public-deployment}
+      AUTO_CREATE_DB: "true"
+      ENABLE_SCHEDULER: "false"
+    depends_on:
+      erp-db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  erp-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: erp
+      POSTGRES_USER: erpuser
+      POSTGRES_PASSWORD: erppass
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U erpuser -d erp"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - erp_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  hris_uploads:
+  hris_postgres_data:
+  erp_postgres_data:
